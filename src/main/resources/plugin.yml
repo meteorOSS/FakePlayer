@@ -1,0 +1,9 @@
+name: FakePlayer
+version: '${project.version}'
+main: com.meteor.fakeplayer.FakePlayer
+depend:
+  - PlaceholderAPI
+  - JellyLib
+  - ProtocolLib
+commands:
+  fakeplayer:
