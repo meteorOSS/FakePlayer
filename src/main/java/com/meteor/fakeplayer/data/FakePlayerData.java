@@ -8,7 +8,10 @@ import com.comphenix.protocol.wrappers.PlayerInfoData;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.meteor.fakeplayer.FakePlayer;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -17,14 +20,35 @@ import java.util.stream.Collectors;
 
 public class FakePlayerData {
 
+    private FakePlayer plugin;
+
     private Map<UUID,String> fakePlayers;
 
     // 假玩家数据包列表
     private List<PlayerInfoData> playerInfoDataList;
 
-    public FakePlayerData(){
+    public FakePlayerData(FakePlayer plugin){
+        this.plugin = plugin;
         this.fakePlayers = new HashMap<>();
         this.playerInfoDataList = new ArrayList<>();
+    }
+
+    public String fakePapi(String format){
+        List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
+        if(players.isEmpty()) return format;
+        Collections.shuffle(players);
+        return PlaceholderAPI.setPlaceholders(players.get(0),format);
+    }
+
+    private String format(String playerName){
+        String format = plugin.getConfig().getString("format").replace("{player_name}",playerName);
+        ConfigurationSection randomConfig = plugin.getConfig().getConfigurationSection("random");
+        for (String key : randomConfig.getKeys(false)) {
+            List<String> stringList = randomConfig.getStringList(key);
+            Collections.shuffle(stringList);
+            format = format.replace(String.format("{%s}",key),stringList.get(0));
+        }
+        return fakePapi(ChatColor.translateAlternateColorCodes('&',format));
     }
 
     /**
@@ -38,7 +62,7 @@ public class FakePlayerData {
         }
         UUID uuid = UUID.randomUUID();
         WrappedGameProfile fakeProfile = new WrappedGameProfile(uuid, playerName);
-        PlayerInfoData playerInfoData = new PlayerInfoData(fakeProfile, 1, EnumWrappers.NativeGameMode.SURVIVAL,WrappedChatComponent.fromText(playerName));
+        PlayerInfoData playerInfoData = new PlayerInfoData(fakeProfile, 1, EnumWrappers.NativeGameMode.SURVIVAL,WrappedChatComponent.fromText(format(playerName)));
         playerInfoDataList.add(playerInfoData);
         fakePlayers.put(uuid,playerName);
         return playerInfoDataList.size();

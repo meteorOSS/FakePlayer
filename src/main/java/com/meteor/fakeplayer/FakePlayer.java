@@ -23,23 +23,15 @@ public final class FakePlayer extends JavaPlugin implements Listener {
 
         INSTANCE = this;
 
-        this.fakePlayerData = new FakePlayerData();
+        saveDefaultConfig();
+
+        this.fakePlayerData = new FakePlayerData(this);
 
         this.commandManager = new CommandManager(this);
         this.commandManager.init();
 
         getCommand("fakeplayer").setExecutor(commandManager);
-
-        // 重写%server_online%变量返回值
-        PlaceholderAPI.registerPlaceholderHook("server", new PlaceholderHook() {
-            @Override
-            public String onPlaceholderRequest(Player p, String params) {
-                if(params.equalsIgnoreCase("online")){
-                    return String.valueOf(Bukkit.getOnlinePlayers().size()+fakePlayerData.getAmount());
-                }
-                return super.onPlaceholderRequest(p,params);
-            }
-        });
+        (new PapiHook()).register();
         getServer().getPluginManager().registerEvents(this,this);
     }
 

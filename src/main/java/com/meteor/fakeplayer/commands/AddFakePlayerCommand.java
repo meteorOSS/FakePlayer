@@ -39,7 +39,6 @@ public class AddFakePlayerCommand extends Icmd {
             return;
         }
         FakePlayerData fakePlayerData = FakePlayer.INSTANCE.getFakePlayerData();
-
         if(fakePlayerData.add(strings[1])!=-1){
             commandSender.sendMessage("添加成功,当前数量："+fakePlayerData.getAmount());
         }else {

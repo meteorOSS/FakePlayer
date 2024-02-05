@@ -4,17 +4,14 @@ import com.meteor.jellylib.command.Icmd;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Arrays;
-import java.util.List;
-
-public class HelpCommand extends Icmd {
-    public HelpCommand(JavaPlugin plugin) {
+public class ReloadCommand extends Icmd {
+    public ReloadCommand(JavaPlugin plugin) {
         super(plugin);
     }
 
     @Override
     public String label() {
-        return "help";
+        return "reload";
     }
 
     @Override
@@ -34,11 +31,7 @@ public class HelpCommand extends Icmd {
 
     @Override
     public void perform(CommandSender commandSender, String[] strings) {
-        Arrays.asList("§aFakePlayer",
-                "§f/fakeplayer add [name] §e添加假人",
-                "§f/fakeplayer add [name/all] §e移除假人",
-                "§f/fakeplayer reload §e重载配置文件"
-
-        ).forEach(s->commandSender.sendMessage(s));
+        plugin.reloadConfig();
+        commandSender.sendMessage("reload done!");
     }
 }

@@ -16,5 +16,6 @@ public class CommandManager extends AbstractCommandManager {
         register(new AddFakePlayerCommand(FakePlayer.INSTANCE));
         register(new RemovePlayerCommand(FakePlayer.INSTANCE));
         register(new HelpCommand(FakePlayer.INSTANCE));
+        register(new ReloadCommand(FakePlayer.INSTANCE));
     }
 }

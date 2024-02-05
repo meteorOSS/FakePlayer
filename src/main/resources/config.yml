@@ -1,0 +1,6 @@
+random:
+  prefix:
+    - '&8[&a初出茅庐&8]'
+    - '&8[&b锋芒毕露&8]'
+
+format: '{prefix} &f{player_name}'
